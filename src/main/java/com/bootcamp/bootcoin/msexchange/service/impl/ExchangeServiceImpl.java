@@ -4,7 +4,14 @@ import com.bootcamp.bootcoin.msexchange.dto.CreateExchangeDto;
 import com.bootcamp.bootcoin.msexchange.entity.Exchange;
 import com.bootcamp.bootcoin.msexchange.repository.ExchangeRepository;
 import com.bootcamp.bootcoin.msexchange.service.ExchangeService;
+import com.bootcamp.bootcoin.msexchange.util.Util;
+import com.bootcamp.bootcoin.msexchange.util.mapper.ExchangeModelMapper;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.ReactiveMongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -13,7 +20,9 @@ import reactor.core.publisher.Mono;
 @RequiredArgsConstructor
 public class ExchangeServiceImpl implements ExchangeService {
 
-    //static PersonalClientModelMapper modelMapper = PersonalClientModelMapper.singleInstance();
+    private static ExchangeModelMapper modelMapper = ExchangeModelMapper.singleInstance();
+    @Autowired
+    private ReactiveMongoTemplate mongoTemplate;
 
     public final ExchangeRepository repository;
 
@@ -30,53 +39,36 @@ public class ExchangeServiceImpl implements ExchangeService {
     }
 
     @Override
-    public Mono<Exchange> findByInputCurrency(String inputCurrency) {
+    public Flux<Exchange> findByInputCurrency(String inputCurrency) {
         return repository.findByInputCurrency(inputCurrency);
     }
 
     @Override
-    public Mono<Exchange> findByOutputCurrency(String outputCurrency) {
+    public Flux<Exchange> findByOutputCurrency(String outputCurrency) {
         return repository.findByOutputCurrency(outputCurrency);
+    }
+
+    @Override
+    public Flux<Exchange> findByTag(String tag) {
+        Query q = new Query();
+
+        q.addCriteria(Criteria.where("tag").is(tag))
+                .with(Sort.by(Sort.Direction.DESC, "emisionDate"))
+                .limit(1);
+
+        return mongoTemplate.find(q, Exchange.class);
     }
 
     @Override
     public Mono<Exchange> save(CreateExchangeDto o) {
 
-        return repository.findByTag(o.getInputCurrency()+"."+o.getOutputCurrency())
-                .map( p -> {
-                    /*throw new BadRequestException(
-                            "DocumentNumber",
-                            "[save] The document number "+o.getDocumentNumber()+ " is already in use.",
-                            "An error occurred while trying to create an item.",
-                            getClass(),
-                            "save"
-                    );*/
-                    return null;
-                } )
-                .switchIfEmpty(Mono.defer(() -> {
+        Util.verifyCurrency(o.getInputCurrency(), getClass());
+        Util.verifyCurrency(o.getOutputCurrency(), getClass());
 
-                    /*Util.isNumber(o.getDocumentNumber(), "DocumentNumber", getClass(), "save");
-
-                    Util.verifyDocumentNumber(
-                            o.getDocumentType(),
-                            o.getDocumentNumber(),
-                            getClass(),
-                            "save"
-                    );
-
-                    ClientProfiles.verifyPersonalProfiles(o.getProfile(), getClass(), "create.verifyProfile");
-
-                    o.getAccounts().forEach( acc -> Util.verifyCurrency(acc.getAccountIsoCurrencyCode(), getClass()));
-
-                    return repository.save(modelMapper.reverseMapCreateWithDate(o));
-
-                     */
-                    return null;
-
-                }))
+        return modelMapper.reverseMapCreateExchange(o)
+                .flatMap( exchange -> repository.save(exchange))
                 .onErrorResume( e -> Mono.error(e))
                 .cast(Exchange.class);
-
 
     }
 

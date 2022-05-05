@@ -1,6 +1,7 @@
 package com.bootcamp.bootcoin.msexchange.controller;
 
 import com.bootcamp.bootcoin.msexchange.dto.CreateExchangeDto;
+import com.bootcamp.bootcoin.msexchange.dto.GetExchangeDto;
 import com.bootcamp.bootcoin.msexchange.entity.Exchange;
 import com.bootcamp.bootcoin.msexchange.service.ExchangeService;
 import com.bootcamp.bootcoin.msexchange.service.impl.ExchangeServiceImpl;
@@ -26,6 +27,7 @@ public class ExchangeController {
     public final ExchangeServiceImpl service;
 
     @GetMapping
+    @Operation( summary = "List all currency exchange records", description = "")
     public Mono<ResponseEntity<Flux<Exchange>>> findAll() {
         return Mono.just(
                 ResponseEntity.ok()
@@ -35,6 +37,7 @@ public class ExchangeController {
     }
 
     @GetMapping("/{id}")
+    @Operation( summary = "List a specific currency exchange record by id", description = "")
     public Mono<ResponseEntity<Mono<Exchange>>> findById(@PathVariable String id) {
         return Mono.just(
                 ResponseEntity.ok()
@@ -44,7 +47,8 @@ public class ExchangeController {
     }
 
     @GetMapping("/input/{inputCurrency}")
-    public Mono<ResponseEntity<Mono<Exchange>>> findByInputCurrency(@PathVariable String inputCurrency) {
+    @Operation( summary = "List a currency exchange records by input currency", description = "")
+    public Mono<ResponseEntity<Flux<Exchange>>> findByInputCurrency(@PathVariable String inputCurrency) {
         return Mono.just(
                 ResponseEntity.ok()
                         .contentType(MediaType.APPLICATION_JSON)
@@ -53,11 +57,23 @@ public class ExchangeController {
     }
 
     @GetMapping("/output/{outputCurrency}")
-    public Mono<ResponseEntity<Mono<Exchange>>> findByOutputCurrency(@PathVariable String outputCurrency) {
+    @Operation( summary = "List a currency exchange records by output currency", description = "")
+    public Mono<ResponseEntity<Flux<Exchange>>> findByOutputCurrency(@PathVariable String outputCurrency) {
         return Mono.just(
                 ResponseEntity.ok()
                         .contentType(MediaType.APPLICATION_JSON)
                         .body(service.findByOutputCurrency(outputCurrency))
+        );
+    }
+
+    @PostMapping("/tag")
+    @Operation( summary = "List the last exchange rate by tag", description = "")
+    public Mono<ResponseEntity<Flux<Exchange>>> findByTag(@RequestBody GetExchangeDto o) {
+        String tag = o.getInputCurrency() + "." + o.getOutputCurrency();
+        return Mono.just(
+                ResponseEntity.ok()
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .body(service.findByTag(tag))
         );
     }
 

@@ -11,9 +11,11 @@ public interface ExchangeService {
 
     public Mono<Exchange> findById(String id);
 
-    public Mono<Exchange> findByInputCurrency(String documentNumber);
+    public Flux<Exchange> findByInputCurrency(String documentNumber);
 
-    public Mono<Exchange> findByOutputCurrency(String documentNumber);
+    public Flux<Exchange> findByOutputCurrency(String documentNumber);
+
+    public Flux<Exchange> findByTag(String tag);
 
     public Mono<Exchange> save(CreateExchangeDto o);
 

@@ -1,17 +1,21 @@
 package com.bootcamp.bootcoin.msexchange.util;
 
-import com.bootcamp.client.personal.entity.DocumentType;
-import com.bootcamp.client.personal.entity.PersonalDocument;
-import com.bootcamp.client.util.handler.exceptions.BadRequestException;
+import com.bootcamp.bootcoin.msexchange.util.handler.exceptions.BadRequestException;
 
-import java.util.Currency;
-import java.util.Objects;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Util {
 
+    private static List<String> localCurrencies = Arrays.asList(
+            "BOOTCOIN"
+    );
+
     public static boolean isValidCurrency(String code){
+
+        if(localCurrencies.contains(code)) return true;
+
         try {
             Currency c = Currency.getInstance(code);
             if (c != null) return true;
@@ -99,6 +103,7 @@ public class Util {
         }
     }
 
+    /*
     public static void verifyDocumentNumber(
             String documentType,
             String documentNumber,
@@ -133,6 +138,8 @@ public class Util {
             );
         }
 
-    }
+    }}
+
+     */
 
 }

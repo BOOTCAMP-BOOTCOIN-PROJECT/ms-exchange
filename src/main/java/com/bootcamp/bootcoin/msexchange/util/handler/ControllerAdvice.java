@@ -16,6 +16,8 @@ public class ControllerAdvice {
     public ResponseEntity<ErrorDto> runtimeExceptionHandler(RuntimeException ex) {
         ErrorDto err = ErrorDto.builder().code("RUNTIME").message(ex.getMessage()).build();
 
+        ex.printStackTrace();
+
         Util.log(getClass(), Level.SEVERE, " [{0}] {1}", new Object[] { err.getCode(), err.getMessage() });
 
         return new ResponseEntity<>(err, HttpStatus.INTERNAL_SERVER_ERROR);
