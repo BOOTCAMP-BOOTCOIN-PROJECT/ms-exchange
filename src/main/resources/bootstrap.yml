@@ -20,4 +20,4 @@ springdoc:
 
 # Tomcat Server Port
 server:
-  port: 3000
+  port: ${MICROSERVICE_PORT:3000}
