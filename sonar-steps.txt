@@ -1,0 +1,16 @@
+
+Run sonarqube server
+docker run -d --name sonarqube -p 9000:9000 -p 9092:9092 sonarqube
+user:admin password:admin
+
+crear 
+
+mvn clean org.jacoco:jacoco-maven-plugin:prepare-agent install
+
+mvn sonar:sonar -Dsonar.login=85e3072394583b74f519260510f20064fdd02908
+
+-Dsonar.login=85e3072394583b74f519260510f20064fdd02908
+or
+sonar-project.properties
+
+RUN sonar-scanner
