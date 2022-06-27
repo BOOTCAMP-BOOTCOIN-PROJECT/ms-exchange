@@ -1,5 +1,13 @@
 # Use redis password
 # docker-compose -f .\docker-compose.redis.yml up -d
+# internal client: redis-cli
+# COMMANDS:
+# Strings: set {key} {value} / get {key}
+# Hashes: hmset {key} {field} {value} / hmget {key} {field} / hgetall {key}
+# Lists: lpush {key} {value} / lrange {key} {value}  / rpush {key} {start} {final}
+# Sets: sadd {key} {value} / smembers {key} / srem {key} {value}
+# Sorted Sets: zadd {key} {score} {value} / zrange {key} {start} {final}
+
 version: '3.1'
 
 services:
