@@ -89,6 +89,16 @@
 			<version>1.6.7</version>
 		</dependency>
 
+		<!-- START REDIS CONFIGS -->
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-data-redis</artifactId>
+		</dependency>
+
+
+		<!-- END REDIS CONFIGS -->
+
 
 		<!-- https://mvnrepository.com/artifact/org.modelmapper/modelmapper -->
 		<dependency>
