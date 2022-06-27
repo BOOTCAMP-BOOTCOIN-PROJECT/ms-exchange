@@ -1,20 +1,22 @@
-package com.bootcamp.bootcoin.msexchange.repository;
+package com.bootcamp.bootcoin.msexchange.service.impl;
 
 import com.bootcamp.bootcoin.msexchange.entity.Exchange;
+import com.bootcamp.bootcoin.msexchange.service.RedisRepository;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.util.Map;
 
-@Repository
-@AllArgsConstructor
-public class ExchangeRedisRepository implements RedisRepository{
+@Service
+@RequiredArgsConstructor
+public class ExchangeRedisRepository implements RedisRepository {
 
-    private static final String KEY = "exchange";
-    private RedisTemplate<String, Exchange> redisTemplate;
+    private static final String KEY = "Exchange";
+    private final RedisTemplate<String, Exchange> redisTemplate;
     private HashOperations hashOperations;
 
     @PostConstruct
