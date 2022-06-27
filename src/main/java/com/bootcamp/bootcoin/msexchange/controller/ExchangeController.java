@@ -3,9 +3,8 @@ package com.bootcamp.bootcoin.msexchange.controller;
 import com.bootcamp.bootcoin.msexchange.dto.CreateExchangeDto;
 import com.bootcamp.bootcoin.msexchange.dto.GetExchangeDto;
 import com.bootcamp.bootcoin.msexchange.entity.Exchange;
-import com.bootcamp.bootcoin.msexchange.service.ExchangeService;
+import com.bootcamp.bootcoin.msexchange.repository.ExchangeRedisRepository;
 import com.bootcamp.bootcoin.msexchange.service.impl.ExchangeServiceImpl;
-import com.google.gson.Gson;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +23,7 @@ import java.net.URI;
 @RequiredArgsConstructor
 public class ExchangeController {
 
-    public final ExchangeServiceImpl service;
+    private final ExchangeServiceImpl service;
 
     @GetMapping
     @Operation( summary = "List all currency exchange records", description = "")

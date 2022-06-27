@@ -2,6 +2,7 @@ package com.bootcamp.bootcoin.msexchange.service.impl;
 
 import com.bootcamp.bootcoin.msexchange.dto.CreateExchangeDto;
 import com.bootcamp.bootcoin.msexchange.entity.Exchange;
+import com.bootcamp.bootcoin.msexchange.repository.ExchangeRedisRepository;
 import com.bootcamp.bootcoin.msexchange.repository.ExchangeRepository;
 import com.bootcamp.bootcoin.msexchange.service.ExchangeService;
 import com.bootcamp.bootcoin.msexchange.util.Util;
@@ -25,11 +26,14 @@ public class ExchangeServiceImpl implements ExchangeService {
     private ReactiveMongoTemplate mongoTemplate;
 
     public final ExchangeRepository repository;
+    private final ExchangeRedisRepository redisRepository;
 
     //public final WebClientService webClient;
 
     @Override
     public Flux<Exchange> findAll() {
+        System.out.println("REDIS: findAll");
+        System.out.println("REDIS: " + redisRepository.getAll());
         return repository.findAll();
     }
 
@@ -56,6 +60,10 @@ public class ExchangeServiceImpl implements ExchangeService {
                 .with(Sort.by(Sort.Direction.DESC, "emisionDate"))
                 .limit(1);
 
+        System.out.println(
+                redisRepository.findByTag(tag)
+        );
+
         return mongoTemplate.find(q, Exchange.class);
     }
 
@@ -66,7 +74,10 @@ public class ExchangeServiceImpl implements ExchangeService {
         Util.verifyCurrency(o.getOutputCurrency(), getClass());
 
         return modelMapper.reverseMapCreateExchange(o)
-                .flatMap( exchange -> repository.save(exchange))
+                .flatMap( exchange -> {
+                    redisRepository.save(exchange);
+                    return repository.save(exchange);
+                })
                 .onErrorResume( e -> Mono.error(e))
                 .cast(Exchange.class);
 

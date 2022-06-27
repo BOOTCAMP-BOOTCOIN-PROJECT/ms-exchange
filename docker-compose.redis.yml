@@ -2,6 +2,7 @@
 # docker-compose -f .\docker-compose.redis.yml up -d
 # internal client: redis-cli
 # COMMANDS:
+# keys * -> returns all keys
 # Strings: set {key} {value} / get {key}
 # Hashes: hmset {key} {field} {value} / hmget {key} {field} / hgetall {key}
 # Lists: lpush {key} {value} / lrange {key} {value}  / rpush {key} {start} {final}

@@ -10,7 +10,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.core.env.Environment;
+import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 
+import java.util.Scanner;
 import java.util.logging.Logger;
 
 @OpenAPIDefinition(info = @Info(
@@ -21,6 +23,7 @@ import java.util.logging.Logger;
 		license = @License(name = "MIT License", url = "https://choosealicense.com/licenses/mit/")
 ))
 @EnableEurekaClient
+@EnableRedisRepositories
 @SpringBootApplication
 public class MsExchangeApplication implements CommandLineRunner {
 

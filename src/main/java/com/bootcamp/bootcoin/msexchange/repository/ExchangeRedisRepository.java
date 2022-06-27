@@ -1,8 +1,6 @@
-package com.bootcamp.bootcoin.msexchange.service.impl;
+package com.bootcamp.bootcoin.msexchange.repository;
 
 import com.bootcamp.bootcoin.msexchange.entity.Exchange;
-import com.bootcamp.bootcoin.msexchange.service.RedisRepository;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
