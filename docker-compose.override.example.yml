@@ -4,6 +4,7 @@ services:
   app:
     environment:
       MICROSERVICE_HOSTNAME: "localhost"
+      MICROSERVICE_PORT: 3005
       CONFIG_SERVER_URI: "config_service_url: default localhost:8081"
       SECURITY_USERNAME: "config_service_security_username"
       SECURITY_PASSWORD: "config_service_security_password"
